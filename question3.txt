@@ -1,0 +1,15 @@
+3. What is the purpose of the suspend modifier in Kotlin Coroutines?
+
+The suspend modifier allows a function to pause its execution and resume later without blocking the thread.
+It can only be called from other coroutines or suspend functions.
+It’s primarily used in asynchronous programming to make long-running operations (like network requests, database queries, etc.) non-blocking.
+Suspending a function doesn't mean blocking a thread; it means allowing other work to be done while waiting for some operation to finish.
+
+
+Analogy:
+Imagine you're ordering food at a restaurant.
+
+Without suspend (Traditional Threading): You'd have to sit at the table and do nothing until your food arrives.
+The waiter (thread) is also stuck, unable to serve other customers.  This is blocking.
+With suspend (Coroutines): You order your food (call a suspend function).  The waiter (coroutine) can then go and serve other customers (the thread is free to do other work).
+When your food is ready, the waiter comes back and serves you (the coroutine is resumed).  You didn't have to wait idly, and neither did the waiter.
