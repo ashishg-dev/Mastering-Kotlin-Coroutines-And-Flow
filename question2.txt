@@ -1,0 +1,41 @@
+2 - Difference between launch and async in Kotlin Coroutines.
+
+In Kotlin Coroutines, both launch and async are used to start a coroutine, but they have distinct differences in terms of return values and how they are used in managing tasks. Here's a breakdown of each:
+
+1. launch:
+Purpose: launch is used to launch a new coroutine that doesn't return any result.
+Return Type: It returns a Job, which represents a non-returning coroutine. A Job can be used to cancel or join the coroutine, but it doesn’t provide any result when it finishes.
+Use Case: You use launch when you want to run a background task (like logging, updating UI, or handling side-effects) that doesn’t require a result to be returned.
+Blocking Behavior: It is non-blocking by default. It launches the coroutine and allows the rest of the program to continue executing.
+
+
+import kotlinx.coroutines.*
+
+fun main() = runBlocking {
+    // Launch a coroutine
+    val job = launch {
+        delay(1000) // Simulate work
+        println("Task completed!")
+    }
+
+}
+
+2. async:
+Purpose: async is used when you want to launch a coroutine that returns a result (a value).
+Return Type: It returns a Deferred<T>, which represents a future result (like Future or Promise in other languages). You can call .await() on it to get the result of the computation once it’s completed.
+Use Case: You use async when you want to perform a task in the background and return a result, like fetching data from a server or performing a calculation, and you need the result to continue the program's execution.
+Blocking Behavior: Like launch, async is also non-blocking. However, to get the result, you need to call .await(), which suspends the coroutine until the result is available.
+
+import kotlinx.coroutines.*
+
+fun main() = runBlocking {
+    // Start an async coroutine to fetch data
+    val deferred = async {
+        delay(1000)  // Simulate a network request
+        return@async "Data fetched!"
+    }
+
+    // Await the result
+    val result = deferred.await()
+    println(result)  // Output: Data fetched!
+}
