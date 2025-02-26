@@ -1,0 +1,22 @@
+12 - What is the purpose of the supervisorScope in Kotlin Coroutines?
+
+In Kotlin Coroutines, the supervisorScope is used to create a coroutine scope where the failure of one child coroutine doesn't affect the others.
+This is particularly useful in scenarios where you want to allow some coroutines to fail independently, without canceling or affecting the other coroutines running in the same scope.
+
+Purpose of supervisorScope:
+Independent Error Handling: By using supervisorScope, you can ensure that if one coroutine fails (throws an exception),
+it doesn't cause the cancellation of other coroutines running concurrently within the same scope. This is in contrast to a regular coroutineScope,
+where the failure of one child coroutine cancels the entire scope and all its children.
+
+Granular Control over Failures: With supervisorScope, you can handle exceptions in a more granular manner by allowing certain parts of your code to fail
+without affecting the overall process or the other tasks that are running concurrently.
+
+Key Difference from coroutineScope:
+coroutineScope cancels all child coroutines when any of them fails.
+supervisorScope allows individual child coroutines to fail without cancelling the other coroutines in the same scope.
+
+When to Use:
+You would use supervisorScope when you have multiple child coroutines, and you need to ensure that the failure of one child doesn't affect the others,
+especially in cases where you want to recover from certain errors without disrupting other ongoing operations.
+
+https://outcomeschool.com/blog/coroutinescope-vs-supervisorscope
