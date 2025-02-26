@@ -1,0 +1,16 @@
+10 - Key Differences Between Structured and Unstructured Concurrency
+
+Structured Concurrency
+Scope:	Coroutines are tied to a specific scope (e.g., viewModelScope, lifecycleScope).
+Lifecycle Management:	Automatic cancellation when the scope ends.
+Error Propagation:	Errors can propagate to parent coroutines, and you can handle them centrally.
+Orphaned Coroutines:	No orphaned coroutines; they are canceled with their scope.
+Memory Management:	Coroutines are safely canceled, preventing memory leaks.
+
+Unstructured Concurrency
+Scope: Coroutines are not tied to a specific scope (e.g., GlobalScope).
+Lifecycle Management:	No automatic cancellation. You must manually manage lifecycle.
+Error Propagation:	Errors are harder to manage, and failure doesn't propagate automatically.
+Orphaned Coroutines:	Coroutines can continue running after the component is destroyed.
+Memory Management:	Risk of memory leaks if coroutines are not canceled manually.
+
