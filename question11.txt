@@ -1,0 +1,48 @@
+11 - How can you implement a timeout for a coroutine in Kotlin?
+
+In Kotlin, you can implement a timeout for a coroutine using the withTimeout or withTimeoutOrNull functions.
+These functions allow you to specify a timeout duration, and if the coroutine doesn't complete within that time, it will be canceled.
+
+1. Using withTimeout
+withTimeout throws a TimeoutCancellationException if the coroutine doesn't complete within the specified time limit.
+
+Example with withTimeout:
+import kotlinx.coroutines.*
+
+fun main() = runBlocking {
+    try {
+        withTimeout(2000) {  // Timeout set to 2 seconds
+            delay(3000)  // Simulate a long-running task
+            println("Task completed")
+        }
+    } catch (e: TimeoutCancellationException) {
+        println("Timeout occurred: ${e.message}")
+    }
+}
+
+2. Using withTimeoutOrNull
+withTimeoutOrNull is similar to withTimeout, but instead of throwing an exception when the timeout occurs,
+it simply returns null if the coroutine exceeds the timeout. This can be useful when you want to handle the timeout without throwing exceptions.
+
+Example with withTimeoutOrNull:
+import kotlinx.coroutines.*
+
+fun main() = runBlocking {
+    val result = withTimeoutOrNull(2000) {  // Timeout set to 2 seconds
+        delay(3000)  // Simulate a long-running task
+        "Task completed"
+    }
+    
+    if (result == null) {
+        println("Timeout occurred, task did not complete in time.")
+    } else {
+        println("Task result: $result")
+    }
+}
+
+Key Differences:
+withTimeout: Throws a TimeoutCancellationException if the coroutine exceeds the timeout.
+withTimeoutOrNull: Returns null if the coroutine exceeds the timeout, without throwing an exception.
+
+
+
