@@ -1,0 +1,46 @@
+8 - what is thread pool?
+
+A thread pool is a collection of pre-created threads that are kept ready to perform tasks when needed.
+Instead of creating a new thread every time a task needs to be performed (which can be slow and inefficient),
+a thread pool allows you to reuse existing threads to execute multiple tasks.
+
+Think of a thread pool like a team of workers who are always ready to do jobs.
+Whenever a new job comes up, a worker (thread) from the team takes it up.
+Once they finish the job, they’re ready to do another one without having to be re-hired or set up again.
+
+Simple Example:
+Imagine you’re at a restaurant. The kitchen (thread pool) has 5 chefs (threads) who are always ready to cook.
+When you place an order (a task), one of the chefs takes it and starts cooking. When the chef finishes the order,
+they don’t leave the kitchen – they’re ready to take the next order.
+Without a thread pool, each time you place an order, the restaurant would need to hire a new chef (create a new thread),
+which would take time and resources.
+
+import java.util.concurrent.Executors
+
+fun main() {
+    // Create a ThreadPool with 3 threads
+    val threadPool = Executors.newFixedThreadPool(3)
+
+    // Function to perform a simple task
+    val task: Runnable = Runnable {
+        println("Task ${Thread.currentThread().name} is being processed")
+    }
+
+    // Submit tasks to the thread pool
+    for (i in 1..5) {
+        threadPool.submit(task)
+    }
+
+    // Shut down the thread pool once all tasks are done
+    threadPool.shutdown()
+}
+
+
+Explanation:
+Executors.newFixedThreadPool(3): This creates a thread pool with a fixed size of 3 threads.
+Runnable: This is a simple task that each thread will execute. Here, we're just printing the name of the thread that is processing the task.
+submit(task): This submits the task to the thread pool. Even though we are submitting 5 tasks, only 3 threads will run them concurrently.
+shutdown(): After all tasks are submitted, we call shutdown() to stop the thread pool from accepting new tasks and free up the resources.
+
+
+  
