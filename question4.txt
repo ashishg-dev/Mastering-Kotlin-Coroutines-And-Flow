@@ -14,6 +14,8 @@ lifecycleScope (Android):  This scope is for tying coroutines to the lifecycle o
 Coroutines launched in this scope are automatically cancelled when the LifecycleOwner reaches a certain state (like onDestroy for an Activity or Fragment).   
 
 CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate): You can create your own custom scope using the CoroutineScope builder function.
+`CoroutineScope` is a way to define the scope of a coroutine. It provides a structured way to launch coroutines and ensures that they are properly 
+cancelled when the scope is cancelled.
 The SupervisorJob() is important as it allows other coroutines within the same scope to continue running even if one of them fails.   
 
 
