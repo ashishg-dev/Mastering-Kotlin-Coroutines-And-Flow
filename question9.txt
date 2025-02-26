@@ -1,0 +1,45 @@
+9. How do you achieve parallelism using Kotlin Coroutines?
+
+To achieve parallelism in Kotlin Coroutines, you can launch multiple coroutines concurrently
+and let them run in parallel, either within the same scope or across different scopes.
+
+Key Concepts for Parallelism:
+async and await:
+async is used to start a coroutine that will return a result (usually a deferred value).
+await is used to retrieve the result of the deferred coroutine, which suspends the current coroutine until the result is available.
+This allows you to run tasks in parallel and gather the results when they are all done.
+
+import kotlinx.coroutines.*
+
+fun main() = runBlocking {
+    val result1 = async { task1() }
+    val result2 = async { task2() }
+    
+    // Wait for both tasks to finish and get their results
+    println("Result 1: ${result1.await()}")
+    println("Result 2: ${result2.await()}")
+}
+
+suspend fun task1(): String {
+    delay(1000)  // Simulate some work
+    return "Task 1 Completed"
+}
+
+suspend fun task2(): String {
+    delay(1000)  // Simulate some work
+    return "Task 2 Completed"
+}
+
+
+Key Points:
+Parallel Execution: Both task1() and task2() are launched concurrently using async.
+await(): This suspends the main coroutine until both tasks are completed.
+Efficiency: Both tasks run in parallel, reducing the overall time compared to running them sequentially.
+
+Conclusion:
+Parallelism in Kotlin Coroutines can be achieved by launching multiple coroutines using async,
+allowing tasks to run concurrently and then waiting for their results with await.
+This allows for efficient, non-blocking parallel execution.
+
+
+
