@@ -1,0 +1,12 @@
+13 - withContext function in Kotlin Coroutines?
+
+In Kotlin Coroutines, the withContext function is used to switch the context of a coroutine to a different dispatcher or scope.
+It is a suspending function that allows you to change the execution context (such as switching threads or dispatchers) for a block of code,
+and it will automatically resume in the original context once the block completes.
+
+Key Points about withContext:
+Suspending function: It can only be called from a coroutine or another suspending function.
+Context switching: It allows you to switch between different dispatchers (e.g., Dispatchers.IO, Dispatchers.Default, Dispatchers.Main) to optimize your code for concurrency.
+Thread management: Unlike Thread or ExecutorService, withContext doesn't create a new thread; instead, it switches between existing thread pools managed by the dispatcher.
+Non-blocking: The execution of code within withContext doesn't block the current thread. The code inside the block is suspended while it runs on a different dispatcher.
+Ensures proper execution: After the block completes, execution continues in the original context unless a different one is explicitly provided.
