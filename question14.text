@@ -1,0 +1,42 @@
+14 - How can you handle timeouts in Kotlin Coroutines? 
+
+In Kotlin Coroutines, you can handle timeouts using the withTimeout or withTimeoutOrNull functions.
+
+withTimeout: It cancels the coroutine if it doesn't complete within the specified timeout, throwing a TimeoutCancellationException.
+
+import kotlinx.coroutines.*
+
+suspend fun fetchData(): String {
+    withTimeout(2000) {  // Timeout after 2 seconds
+        delay(3000)  // Simulating a long-running task
+        return "Data"
+    }
+}
+
+fun main() = runBlocking {
+    try {
+        println(fetchData())  // Will throw TimeoutCancellationException
+    } catch (e: TimeoutCancellationException) {
+        println("Timeout occurred")
+    }
+}
+
+----------------
+
+withTimeoutOrNull: It works similarly to withTimeout, but instead of throwing an exception, it returns null if the timeout is reached.
+
+suspend fun fetchData(): String? {
+    return withTimeoutOrNull(2000) {  // Timeout after 2 seconds
+        delay(3000)
+        "Data"
+    }
+}
+
+fun main() = runBlocking {
+    println(fetchData())  // Will return null
+}
+
+Summary:
+withTimeout: Throws an exception if the task times out.
+withTimeoutOrNull: Returns null if the task times out.
+
