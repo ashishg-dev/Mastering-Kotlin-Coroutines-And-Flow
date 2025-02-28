@@ -1,5 +1,3 @@
-
-
 4 - Types of Coroutine Scopes:
 
 Kotlin provides several built-in coroutine scopes, and you can also create your own:   
