@@ -1,0 +1,49 @@
+What is the difference between join() and await()?
+
+1. join() in Kotlin Coroutines
+Context: join() is used to wait for the completion of a coroutine, typically in the context of a job (such as a Job or Deferred).
+Purpose: join() is a suspending function that blocks the current coroutine and waits for the completion of another coroutine (or job). It does not return a value.
+Behavior: It suspends the current coroutine until the target coroutine (or job) is complete, but it does not give you the result of the coroutine.
+
+Example with join():
+
+import kotlinx.coroutines.*
+
+fun main() = runBlocking {
+    val job = launch {
+        delay(1000L)  // Simulating some work
+        println("Task finished.")
+    }
+
+    job.join()  // Suspends the current coroutine until `job` finishes
+    println("Main coroutine continues after job is done.")
+}
+
+Explanation:
+job.join() suspends the main coroutine until the launched job (job) is finished. After the job completes, the main coroutine continues executing.
+join() only ensures that the coroutine completes, but it does not return any result.
+
+2. await() in Kotlin Coroutines
+Context: await() is specifically used with Deferred objects, which represent a result of an asynchronous operation in Kotlin coroutines.
+Purpose: await() is used to wait for the result of a coroutine (or an asynchronous task). It returns the result of the coroutine once it completes.
+Behavior: await() suspends the current coroutine until the Deferred result is available, then it returns the result of the computation or task.
+It can only be called on objects of type Deferred.
+
+Example with await():
+
+import kotlinx.coroutines.*
+
+fun main() = runBlocking {
+    val deferred = async {
+        delay(1000L)  // Simulating some work
+        "Result from async task"  // Returning a value
+    }
+
+    val result = deferred.await()  // Suspends until the result is available
+    println("Received result: $result")
+}
+
+Explanation:
+async creates a coroutine that returns a Deferred object, which represents a future result.
+await() suspends the current coroutine until the result is available and then returns that result.
+await() is used when the coroutine performs a computation that returns a value.
