@@ -17,3 +17,4 @@ The Essential Guide to Kotlin Coroutines for Android Development
 14. [How can you handle timeouts in Kotlin Coroutines?](/question14.txt)
 15. [What is coroutineScope vs CoroutineScope?](/question15.txt)
 16. [Difference between yield() and Thread.sleep() in coroutines?](/question16.txt)
+17. [What is the difference between join() and await()?](/question17.txt)
