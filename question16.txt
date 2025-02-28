@@ -1,0 +1,8 @@
+What is the difference between yield() and Thread.sleep() in coroutines?
+
+yield(): It is a suspending function that tells the coroutine dispatcher to give up the current thread and allow other coroutines to run.
+It doesn't block the thread but allows the scheduler to switch to another coroutine that may be ready to run.
+
+Thread.sleep(): It is a blocking function that halts the entire thread for the specified duration, preventing any other tasks from executing on that thread.
+
+While Thread.sleep() can cause performance issues by blocking the thread, yield() provides a cooperative suspension mechanism that does not block the thread.
