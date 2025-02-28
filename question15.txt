@@ -1,0 +1,46 @@
+What is coroutineScope vs CoroutineScope?
+
+1. CoroutineScope (as a class/interface)
+Think of CoroutineScope as a container where you can start coroutines (tasks). When you use CoroutineScope,
+you're basically saying, "I want to launch tasks, and these tasks should be tied to this container."
+
+It is used to manage coroutines (tasks) and keeps track of their lifecycle.
+If you cancel the scope, all tasks inside it are also canceled.
+
+class MyScopeExample : CoroutineScope {
+    // You need to provide a "context" for the scope, like a background thread (Dispatchers.IO)
+    override val coroutineContext = Dispatchers.Main + Job()
+
+    fun startTasks() {
+        launch {
+            // Start a background task here
+        }
+    }
+}
+
+2. coroutineScope (as a function)
+coroutineScope is a suspending function that creates a temporary container for tasks.
+You can launch coroutines inside it, and the function will wait until all tasks inside it are finished before it continues.
+
+It does not return until all tasks inside the scope are done.
+It's useful when you want to make sure all tasks are complete before moving on.
+
+suspend fun doSomeWork() {
+    coroutineScope {
+        launch {
+            // Start a task here
+        }
+        launch {
+            // Start another task here
+        }
+    }
+    // Only after both tasks are finished, it will move to the next line
+}
+
+
+Key Differences in terms of starting coroutines:
+CoroutineScope is the context where you define the environment for coroutines, and inside it, you use launch or async to start tasks.
+coroutineScope is a function that creates a temporary scope to run coroutines, and it waits for all tasks to finish before returning from the function.
+
+So, both are related to starting coroutines, but CoroutineScope is used to define the context for launching coroutines,
+while coroutineScope is a function that creates a temporary scope to ensure tasks are completed before continuing.
