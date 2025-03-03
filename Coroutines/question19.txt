@@ -1,0 +1,14 @@
+19 - What are some common use cases for Kotlin Coroutines in Android development?
+
+Kotlin Coroutines offer several powerful capabilities for handling common tasks in Android development, including:
+
+Network Requests - Perform asynchronous network calls.
+Database Operations - Execute database queries and insertions on background threads.
+File I/O - Perform file reading and writing operations in a non-blocking manner using Dispatchers.IO.
+UI Updates - Update the UI after performing asynchronous tasks.
+Parallelizing Tasks - Run tasks concurrently and wait for results.
+Delays and Timeouts - Handle delays and timeouts without blocking the main thread.
+Periodic Tasks - Schedule recurring tasks at fixed intervals.
+Job Cancellation and Cleanup - Cancel jobs and clean up resources when needed.
+
+By using coroutines, you can write cleaner, more maintainable code and avoid the pitfalls of callback-based asynchronous programming.
