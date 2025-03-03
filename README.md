@@ -1,5 +1,5 @@
 # Mastering kotlin Coroutines and Flow in android
-The Essential Guide to Kotlin Coroutines for Android Development
+The Essential Guide to Kotlin Coroutines for Android App Development
 
 1. [What are Kotlin Coroutines, and how are they different from traditional threading?](/Coroutines/question01.txt)
 2. [Difference between launch and async in Kotlin Coroutines](/Coroutines/question02.txt)
@@ -23,10 +23,11 @@ The Essential Guide to Kotlin Coroutines for Android Development
 20. [How do you manage concurrent tasks with a fixed number of threads using Kotlin Coroutines?](/Coroutines/question20.txt)
 21. [How do you optimize coroutine performance in Kotlin?](question21.txt)
 
-The Essential Guide to Kotlin Flow for Android Development
+The Essential Guide to Kotlin Flow for Android App Development
 1. [What are Kotlin Flows?](/Flows/question01.txt)
 2. [What are the different types of flow builders?](/Flows/question02.txt)
 3. [What are different types of terminal Operators in Kotlin Flow?](/Flows/question03.txt)
 4. [Difference between launchIn and collect in kotlin flow?](/Flows/question04.txt)
-5. [Differences Between Cold and Hot Flow?](/Flows/question05.txt)
-6. 
+5. [Differences between Cold and Hot Flow?](/Flows/question05.txt)
+6. [Difference between StateFlow and SharedFlow?](/Flows/question06.txt)
+7. 
