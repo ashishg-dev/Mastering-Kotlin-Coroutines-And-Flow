@@ -1,0 +1,21 @@
+21 - How do you optimize coroutine performance in Kotlin?
+
+Choose the Right Dispatcher: Use Dispatchers.Default for CPU-bound tasks,
+Dispatchers.IO for I/O-bound tasks, and Dispatchers.Main for UI updates.
+
+Minimize Blocking: Use non-blocking functions like delay() instead of Thread.sleep(), and avoid unnecessary join() calls.
+
+Structured Concurrency: Use coroutineScope or supervisorScope to manage coroutines with well-defined lifetimes.
+
+Limit Concurrency: Use semaphores or custom thread pools (with newFixedThreadPoolContext) to control concurrent tasks.
+
+Use async for Concurrent Tasks: Leverage async/await for concurrent but independent tasks.
+
+Avoid Creating Too Many Coroutines: Manage the number of coroutines you create,
+and consider using a Channel or other mechanisms for batching tasks.
+
+Caching and Memoization: Cache results to avoid redundant computation or network calls.
+
+Flow for Streams: Use Flow to efficiently handle streams of data.
+
+Proper Cancellation: Cancel unnecessary or long-running coroutines when they’re no longer needed.
