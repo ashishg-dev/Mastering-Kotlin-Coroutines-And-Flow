@@ -21,3 +21,4 @@ The Essential Guide to Kotlin Coroutines for Android Development
 18. [How would you ensure coroutines are cancelled properly in an Android app?](/question18.txt)
 19. [What are some common use cases for Kotlin Coroutines in Android development?](/question19.txt)
 20. [How do you manage concurrent tasks with a fixed number of threads using Kotlin Coroutines?](/question20.txt)
+21. [How do you optimize coroutine performance in Kotlin?](question21.txt)
