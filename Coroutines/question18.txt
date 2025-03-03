@@ -1,0 +1,43 @@
+18 - How would you ensure coroutines are cancelled properly in an Android app?
+
+In an Android app, ensuring that coroutines are cancelled properly is crucial for avoiding memory leaks, unnecessary work, and 
+keeping the app responsive. There are several techniques you can use to manage and cancel coroutines in Android:
+
+1. Use viewModelScope and lifecycleScope
+Kotlin provides predefined CoroutineScopes that are tightly bound to lifecycle events
+in Android components like ViewModel and Activity/Fragment.
+
+viewModelScope: A scope that is automatically cancelled when the ViewModel is cleared,
+making it perfect for launching long-running tasks tied to the ViewModel.
+
+lifecycleScope: A scope that is tied to the lifecycle of an Activity or Fragment.
+It automatically cancels coroutines when the Activity or Fragment is destroyed.
+
+2. Use CoroutineScope with a Job
+For finer control, you can manually create a CoroutineScope and
+manage the Job to ensure coroutines are properly cancelled when necessary.
+
+class MyActivity : AppCompatActivity() {
+    private lateinit var job: Job
+    private lateinit var scope: CoroutineScope
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        
+        // Create a custom coroutine scope tied to the activity's lifecycle
+        job = SupervisorJob()  // SupervisorJob allows child jobs to fail without affecting the parent
+        scope = CoroutineScope(Dispatchers.Main + job)
+
+        // Launch a coroutine in the custom scope
+        scope.launch {
+            // Perform a task
+            val result = fetchDataFromNetwork()
+            // Update UI
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        job.cancel()  // Cancel the job and all associated coroutines
+    }
+}
