@@ -1,0 +1,151 @@
+Complete List of Kotlin Flow Terminal Operators
+Here’s a more complete list of terminal operators in Kotlin Flow:
+
+1. collect()
+This is the most common terminal operator used to collect values emitted by the flow.
+
+Example:
+val flow = flowOf(1, 2, 3)
+flow.collect { value -> println(value) }
+
+2. single()
+Collects exactly one value from the flow.
+If the flow emits more than one or zero values, it throws an exception.
+
+Example:
+val flow = flowOf(42)
+val value = flow.single()  // Returns 42
+
+val flow1 = flowOf(42,43)
+val value1 = flow1.single()  // java.lang.IllegalArgumentException: Flow has more than one element
+
+
+3. singleOrNull()
+Collects exactly one value or returns null if no value is emitted.
+Throws an exception if more than one value is emitted.
+
+Example:
+val flow = flowOf()
+val value = flow.singleOrNull()  // Returns null
+
+val flow = flowOf(42)
+val value = flow.singleOrNull()  // Returns 42
+
+4. toList()
+Collects all emitted values into a list.
+
+Example:
+val flow = flowOf(1, 2, 3)
+val list = flow.toList()  // Returns [1, 2, 3]
+
+5. toSet()
+Collects all emitted values into a set, ensuring uniqueness.
+
+Example:
+val flow = flowOf(1, 2, 2, 3)
+val set = flow.toSet()  // Returns [1, 2, 3]
+
+6. reduce()
+Aggregates the flow’s emitted values using a binary operation and returns a single result.
+
+Example:
+val flow = flowOf(1, 2, 3)
+val sum = flow.reduce { acc, value -> acc + value }  // Returns 6
+
+7. fold()
+Similar to reduce(), but allows you to specify an initial value for accumulation.
+
+Example:
+val flow = flowOf(1, 2, 3)
+val sum = flow.fold(0) { acc, value -> acc + value }  // Returns 6
+
+8. first()
+Collects and returns the first emitted value. Throws NoSuchElementException if the flow is empty.
+
+Example:
+val flow = flowOf(1, 2, 3)
+val firstValue = flow.first()  // Returns 1
+
+9. last()
+Collects and returns the last emitted value. Throws NoSuchElementException if the flow is empty.
+
+Example:
+val flow = flowOf(1, 2, 3)
+val lastValue = flow.last()  // Returns 3
+
+10. count()
+Counts the number of values emitted by the flow.
+
+Example:
+val flow = flowOf(1, 2, 3)
+val count = flow.count()  // Returns 3
+
+11. any()
+Returns true if the flow emits any values (i.e., not empty). Otherwise, it returns false.
+
+Example:
+val flow = flowOf(1, 2, 3)
+val isNotEmpty = flow.any()  // Returns true
+
+12. all()
+Returns true if all emitted values satisfy the given predicate.
+
+Example:
+val flow = flowOf(1, 2, 3)
+val allGreaterThanZero = flow.all { it > 0 }  // Returns true
+
+13. contains()
+Returns true if the flow emits the given value at least once.
+
+Example:
+val flow = flowOf(1, 2, 3)
+val containsTwo = flow.contains(2)  // Returns true
+
+14. firstOrNull()
+Collects and returns the first value emitted by the flow or null if the flow is empty.
+
+Example:
+val flow = flowOf(1, 2, 3)
+val firstOrNullValue = flow.firstOrNull()  // Returns 1
+
+15. lastOrNull()
+Collects and returns the last value emitted by the flow or null if the flow is empty.
+
+Example:
+val flow = flowOf(1, 2, 3)
+val lastOrNullValue = flow.lastOrNull()  // Returns 3
+
+16. reduceOrNull()
+Aggregates the flow’s emitted values using a binary operation and returns a single result or null if the flow is empty.
+
+Example:
+val flow = flowOf(1, 2, 3)
+val sumOrNull = flow.reduceOrNull { acc, value -> acc + value }  // Returns 6
+
+17. foldOrNull()
+Similar to reduceOrNull(), but allows you to specify an initial value for accumulation. It returns null if the flow is empty.
+
+Example:
+val flow = flowOf(1, 2, 3)
+val sumOrNull = flow.foldOrNull(0) { acc, value -> acc + value }  // Returns 6
+
+18. collectLatest()
+A terminal operator that collects values from a flow but cancels the previous collection if a new value is emitted before the previous one completes.
+It is useful when you want to cancel the previous computation if a new item arrives (such as when collecting user input).
+
+Example:
+val flow = flow {
+    emit(1)
+    delay(500)
+    emit(2)
+}
+runBlocking {
+    flow.collectLatest { value ->
+        delay(1000)  // Simulate processing time        
+        println("Collecting: $value")
+        
+    }
+}
+
+Output:
+Collecting: 2
