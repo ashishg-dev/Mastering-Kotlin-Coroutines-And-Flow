@@ -25,5 +25,5 @@ The Essential Guide to Kotlin Coroutines for Android Development
 
 The Essential Guide to Kotlin Flow for Android Development
 1. [What are Kotlin Flows?](/Flows/question01.txt)
-2. [what are the different types of flow builders](/Flows/question02.txt)
+2. [What are the different types of flow builders?](/Flows/question02.txt)
 3. 
