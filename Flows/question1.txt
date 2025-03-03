@@ -1,0 +1,36 @@
+1 - what is flow in kotlin coroutine?
+
+In Kotlin Coroutines, a Flow is a type that can emit multiple values over time,
+which makes it similar to a stream or observable. It allows you to handle asynchronous data streams
+and is built on top of Kotlin's coroutines framework.
+
+Key Points about Flow:
+Cold Stream: A Flow is cold, meaning it doesn't start emitting values until it is collected.
+This is in contrast to LiveData or StateFlow, which are hot streams (they are active regardless of the collector).
+
+Asynchronous: A Flow allows you to emit values asynchronously and collect them asynchronously,
+making it useful for handling things like user inputs, network responses, or other time-dependent events.
+
+Suspend Functions: The functions inside a Flow builder are suspending functions,
+which means the flow can suspend the computation at certain points without blocking the main thread.
+For example, delay() inside a flow builder won't block the thread; it will just suspend the flow.
+
+Operators: Flow supports a wide range of operators like map, filter, collect, onEach, flatMap, etc.,
+which are used to transform or manipulate the data emitted by the flow.
+
+Backpressure: Unlike traditional callback-based asynchronous handling (like RxJava),
+Kotlin's Flow can manage backpressure internally and automatically suspend the producer when the consumer is slow.
+
+fun flowWithOperators(): Flow<Int> = flow {
+    for (i in 1..5) {
+        delay(100)
+        emit(i)
+    }
+}
+
+fun main() = runBlocking {
+    flowWithOperators()
+        .map { it * 2 }  // Multiply each value by 2
+        .filter { it > 5 }  // Only emit values greater than 5
+        .collect { println(it) }  // Collect and print
+}
