@@ -1,0 +1,82 @@
+5 - Differences Between Cold and Hot Flow?
+
+Cold Flow:
+Definition: A cold flow doesn't emit values until it is collected.
+Behavior: Each time a collector subscribes, it starts emitting values from the beginning.
+Example: flow (e.g., network requests, lazy data generation).
+
+Hot Flow:
+Definition: A hot flow emits values immediately, even if there are no collectors.
+Behavior: Values are emitted continuously, and collectors only receive values that are emitted after they start collecting.
+Example: StateFlow, SharedFlow (e.g., UI state, real-time data).
+
+Key Difference:
+Cold flows are lazy (start emitting only when collected), while hot flows are eager (emit values immediately).
+
+fun simpleFlow(): Flow<Int> = flow {
+    println("Emitting values")
+    emit(1)
+    emit(2)
+    emit(3)
+}
+
+
+Example of Cold Flow:
+
+fun main() = runBlocking {
+    // First collector
+    simpleFlow().collect { value ->
+        println("Collector 1 received: $value")
+    }
+    
+    // Second collector (restarts flow)
+    simpleFlow().collect { value ->
+        println("Collector 2 received: $value")
+    }
+}
+
+Emitting values
+Collector 1 received: 1
+Collector 1 received: 2
+Collector 1 received: 3
+Emitting values
+Collector 2 received: 1
+Collector 2 received: 2
+Collector 2 received: 3
+
+
+Example of Hot Flow:
+
+fun getNumbersHotFlow(): HotFlow<Int> {
+    return someHotflow {
+        (1..5).forEach {
+            delay(1000)
+            emit(it)
+        }
+    }
+}
+
+collecting
+val numbersHotFlow = getNumbersHotFlow()
+
+numbersHotFlow.collect {
+      println("1st Collector: $it")
+}
+
+delay(2500)
+
+numbersHotFlow.collect {
+    println("2nd Collector: $it")
+}
+
+1st Collector: 1
+1st Collector: 2
+1st Collector: 3
+1st Collector: 4
+1st Collector: 5
+
+2nd Collector: 3
+2nd Collector: 4
+2nd Collector: 5
+
+
