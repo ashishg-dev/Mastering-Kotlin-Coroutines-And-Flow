@@ -1,0 +1,27 @@
+20 - How do you manage concurrent tasks with a fixed number of threads using Kotlin Coroutines?
+
+In Kotlin Coroutines, you can manage concurrent tasks using a CoroutineDispatcher backed by a thread pool.
+This can be done by using newFixedThreadPoolContext() to create a fixed number of threads for managing concurrent tasks.
+
+import kotlinx.coroutines.*
+import kotlin.system.measureTimeMillis
+
+fun main() = runBlocking {
+    // Create a fixed thread pool with 3 threads
+    val dispatcher = newFixedThreadPoolContext(3, "MyFixedThreadPool")
+
+    // Launch 10 concurrent tasks
+    val tasks = List(10) { index ->
+        launch(dispatcher) {
+            println("Task $index started on ${Thread.currentThread().name}")
+            delay(1000)  // Simulate some work
+            println("Task $index completed on ${Thread.currentThread().name}")
+        }
+    }
+
+    // Wait for all tasks to complete
+    tasks.joinAll()
+
+    // Clean up the dispatcher
+    dispatcher.close()  // Don't forget to close the dispatcher
+}
