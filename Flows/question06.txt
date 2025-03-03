@@ -1,0 +1,36 @@
+6 - Difference between StateFlow and SharedFlow
+
+In Kotlin Flow, both StateFlow and SharedFlow are types of hot flows,
+meaning they emit values immediately when created and can be shared between multiple collectors.
+However, they have key differences in how they manage and share emitted values.
+
+Key Differences:
+
+StateFlow:
+Purpose: Represents a state and always holds a single, current value.
+Replays Latest Value: It always replays the latest value to new collectors,
+meaning if you collect from a StateFlow, you'll immediately get the most recent value.
+Use Case: Ideal for managing and observing a single state, like UI state (e.g., a ViewModel holding a state).
+
+Orientation changes Explanation:
+Before the orientation change: The StateFlow holds the latest value (e.g., UiState.Success or UiState.Error).
+After the orientation change: The Activity is recreated, but the ViewModel and StateFlow will survive the configuration change,
+and the UI will automatically get the latest value from the StateFlow.
+Result: The UI won’t lose the current state, and it will be restored immediately after the configuration change.
+
+
+SharedFlow:
+Purpose: Represents a stream of events or values, which may not always have a current state.
+Does Not Hold Value: It does not store or hold any value; instead, it emits multiple values over time (e.g., events).
+Replay Capability: You can configure it to replay a specified number of past values (or none).
+Use Case: Ideal for broadcasting events that occur once (e.g., user actions, notifications, signals).
+
+Orientation changes Explanation:
+Before the orientation change: The SharedFlow emits events like NavigateToDetails or ShowToast.
+After the orientation change: The Activity is recreated, and the SharedFlow does not retain past events (unless configured with replay).
+Therefore, new collectors won't receive those events unless they're emitted again.
+Result: If you want certain events to survive the configuration change,
+you can use replay in SharedFlow or re-emit events after the Activity is recreated.
+
+
+https://outcomeschool.com/blog/stateflow-and-sharedflow
