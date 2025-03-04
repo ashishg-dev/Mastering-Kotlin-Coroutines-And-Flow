@@ -30,4 +30,6 @@ The Essential Guide to Kotlin Flow for Android App Development
 4. [Difference between launchIn and collect in kotlin flow?](/Flows/question04.txt)
 5. [Differences between Cold and Hot Flow?](/Flows/question05.txt)
 6. [Difference between StateFlow and SharedFlow?](/Flows/question06.txt)
-7. 
+7. [Difference between StateIn and ShareIn?](/Flows/question07.txt)
+8. [What are the different ways to combine flows?](/Flows/question08.txt)
+9. 
