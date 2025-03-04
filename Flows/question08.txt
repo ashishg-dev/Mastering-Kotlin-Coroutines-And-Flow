@@ -1,0 +1,131 @@
+8 - What are the different ways to combine flows?
+
+1. combine
+The combine operator allows you to combine the latest values from multiple flows.
+When any of the flows emit a new value, the function provided to combine is called with the latest values from all the flows.
+
+When to use:
+You want to combine the values of multiple flows and process them together.
+This operator will emit a new value whenever any of the source flows emits.
+
+Example:
+import kotlinx.coroutines.flow.*
+
+fun combineExample() = flow {
+    emit("Hello")
+}.combine(flowOf("World")) { value1, value2 ->
+    "$value1, $value2"
+}.collect { result ->
+    println(result)  // Output: "Hello, World"
+}
+In this example:
+
+We combine a flow that emits "Hello" with another flow that emits "World".
+Every time either flow emits a new value, we concatenate the two strings and emit the combined result.
+
+
+2. zip
+The zip operator combines values from multiple flows pairwise,
+i.e., it combines the first value from the first flow with the first value from the second flow,
+the second value from each flow, and so on. This operator only emits a value when all source flows emit a value.
+
+When to use:
+You need to combine corresponding values from two or more flows,
+ensuring that the first emitted value from each flow is paired with the first emitted value from each other flow, and so on.
+
+Example:
+import kotlinx.coroutines.flow.*
+
+fun zipExample() = flow {
+    emit(1)
+    emit(2)
+}.zip(flowOf("A", "B")) { number, letter ->
+    "$number$letter"
+}.collect { result ->
+    println(result)  // Output: "1A" then "2B"
+}
+In this example:
+
+We combine each number from the first flow with a corresponding letter from the second flow.
+zip emits "1A" first and then "2B".
+
+3. flattenMerge
+flattenMerge is used to merge multiple flows into a single flow. Each flow will be collected concurrently,
+and the emitted values from each flow are merged into the result stream. This is useful if you have a list of flows and you want to process them all concurrently.
+
+When to use:
+You have a list of flows, and you want to merge them all into a single flow that emits the values from all the flows concurrently.
+
+Example:
+import kotlinx.coroutines.flow.*
+
+fun flattenMergeExample() = flow {
+    emit(flowOf(1, 2, 3))
+    emit(flowOf(4, 5, 6))
+}.flattenMerge().collect { value ->
+    println(value)  // Output: 1, 2, 3, 4, 5, 6 (order may vary)
+}
+In this example:
+
+We emit two flows inside the main flow, and flattenMerge combines the values of both flows into a single flow.
+The emitted values from both flows will be collected concurrently, and the order may not be guaranteed.
+
+4. flattenConcat
+flattenConcat is similar to flattenMerge, but it ensures that the flows are collected sequentially.
+Only when one flow completes its emissions will the next flow begin emitting.
+
+When to use:
+You need to sequentially collect the values from multiple flows, ensuring that one flow finishes before starting to collect the next.
+
+Example:
+import kotlinx.coroutines.flow.*
+
+fun flattenConcatExample() = flow {
+    emit(flowOf(1, 2, 3))
+    emit(flowOf(4, 5, 6))
+}.flattenConcat().collect { value ->
+    println(value)  // Output: 1, 2, 3, 4, 5, 6
+}
+In this example:
+
+The flattenConcat operator ensures that the first flow (1, 2, 3) is collected entirely before starting to collect the second flow (4, 5, 6).
+
+5. merge
+merge is another operator used to combine multiple flows.
+It merges multiple flows into a single flow, where emissions from all flows are processed concurrently.
+This is similar to flattenMerge, but it works on multiple flows directly without needing to emit them inside another flow.
+
+When to use:
+You want to merge multiple flows into a single flow and process their emissions concurrently.
+
+Example:
+import kotlinx.coroutines.flow.*
+
+fun mergeExample() = merge(flowOf(1, 2), flowOf(3, 4)).collect { value ->
+    println(value)  // Output: 1, 2, 3, 4 (order may vary)
+}
+In this example:
+
+The merge operator merges the emissions from two flows into a single stream, and the values are emitted concurrently.
+The order in which they are emitted depends on which flow emits first.
+
+6. combineLatest
+combineLatest combines the latest value from multiple flows and emits a new value whenever any of the flows emits.
+It works like combine, but it only emits when there has been at least one value from each flow.
+
+When to use:
+You want to combine the latest values from multiple flows, and you want to be notified every time any flow emits a new value, but only after each flow has emitted at least one value.
+
+Example:
+import kotlinx.coroutines.flow.*
+
+fun combineLatestExample() = flowOf(1, 2, 3)
+    .combineLatest(flowOf("A", "B", "C")) { number, letter ->
+        "$number$letter"
+    }
+    .collect { result ->
+        println(result)  // Output: "1A", "2B", "3C"
+    }
+In this example:
+
+combineLatest emits the latest value from each flow whenever either flow emits a new value.
