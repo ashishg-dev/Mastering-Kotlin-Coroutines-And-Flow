@@ -1,0 +1,103 @@
+9 - What is backpressure, and how does Kotlin Flow handle it?
+
+Backpressure in Kotlin Flows refers to the scenario where the flow producer emits values
+at a rate faster than the flow consumer can process those values. In a flow-based system,
+if the consumer cannot handle the rate of emitted values, it can lead to issues like
+memory exhaustion, data loss, or inefficient resource usage.
+
+How Kotlin Flow Handles Backpressure
+Kotlin Flow uses suspension to handle backpressure automatically.
+When the consumer cannot keep up with the flow's emissions,
+the Flow will suspend the emission until the consumer is ready to process the next value.
+However, developers can control backpressure behavior using specific operators that let you manage the flow's rate and
+behavior when there's more data being emitted than the consumer can handle.
+
+Key Operators for Handling Backpressure
+
+buffer():
+buffer() is used to store emitted values in a buffer so that the producer doesn’t get suspended
+while the consumer is busy processing the data.
+The default behavior without buffer() is that the flow suspends the producer when the consumer
+is busy processing, but with buffer(), the producer can continue emitting values while the consumer processes them.
+
+val flow = flow {
+    for (i in 1..5) {
+        delay(100)  // Simulating slow emission
+        emit(i)
+    }
+}
+
+runBlocking {
+    flow
+        .buffer()  // Adds a buffer to avoid suspension of the producer
+        .collect { value ->
+            delay(300)  // Simulating slow consumer
+            println("Processed $value")
+        }
+}
+In this example, the buffer() operator ensures that the producer will continue emitting values even if the consumer is slow.
+If the buffer overflows, the producer will suspend until there is space in the buffer.
+
+conflate():
+The conflate() operator is useful when you want to drop intermediate values and only keep the latest one.
+This is ideal when the consumer can’t process each value but only needs the most recent one.
+This operator avoids processing older values by conflating them into the most recent one.
+
+val flow = flow {
+    for (i in 1..5) {
+        delay(100)  // Simulating slow emission
+        emit(i)
+    }
+}
+
+runBlocking {
+    flow
+        .conflate()  // Keeps only the latest value
+        .collect { value ->
+            delay(300)  // Simulating slow consumer
+            println("Processed $value")
+        }
+}
+In this example, the consumer will only process the most recent emitted value (i.e., any intermediate values are dropped).
+
+collectLatest():
+The collectLatest() operator works by canceling the previous value processing when a new value is emitted.
+This is useful when you need to ensure the consumer processes only the latest value and cancels the previous one when new data arrives.
+
+val flow = flow {
+    for (i in 1..5) {
+        delay(100)  // Simulating slow emission
+        emit(i)
+    }
+}
+
+runBlocking {
+    flow
+        .collectLatest { value ->
+            delay(300)  // Simulating slow consumer
+            println("Processed $value")
+        }
+}
+In this example, the consumer will process only the latest emitted value, and older values are dropped if not processed in time.
+
+onBufferOverflow:
+When using buffer(), you can specify a strategy for handling buffer overflows with the onBufferOverflow parameter.
+Available strategies include DROP_OLDEST, DROP_LATEST, and SUSPEND.
+
+val flow = flow {
+    for (i in 1..5) {
+        delay(100)  // Simulating slow emission
+        emit(i)
+    }
+}
+
+runBlocking {
+    flow
+        .buffer(3, onBufferOverflow = BufferOverflow.DROP_OLDEST)  // Drops the oldest items when buffer is full
+        .collect { value ->
+            delay(300)  // Simulating slow consumer
+            println("Processed $value")
+        }
+}
+In this example, if the buffer is full, the DROP_OLDEST strategy ensures that
+the oldest item in the buffer is dropped to make space for the newest item.
