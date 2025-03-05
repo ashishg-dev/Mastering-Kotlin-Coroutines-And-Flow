@@ -32,4 +32,5 @@ The Essential Guide to Kotlin Flow for Android App Development
 6. [Difference between StateFlow and SharedFlow?](/Flows/question06.txt)
 7. [Difference between StateIn and ShareIn?](/Flows/question07.txt)
 8. [What are the different ways to combine flows?](/Flows/question08.txt)
-9. 
+9. [What is backpressure, and how does Kotlin Flow handle it?](/Flows/question09.txt)
+10. 
