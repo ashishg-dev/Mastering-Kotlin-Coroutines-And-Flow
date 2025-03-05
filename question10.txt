@@ -1,0 +1,78 @@
+10 - retry operators in kotlin flows?
+
+In Kotlin, Flow provides several operators that can be used to handle retries.
+These operators are particularly useful in situations where a flow might fail (due to network errors or other issues), and you want to retry the flow after a failure.
+
+Here's a brief explanation of the most common retry operators in Kotlin Flows:
+
+1. retry
+The retry operator allows you to retry collecting the flow a specified number of times before it gives up.
+
+Example:
+
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
+
+fun getData(): Flow<Int> = flow {
+    println("Emitting data...")
+    delay(100)
+    if (Math.random() > 0.5) throw Exception("Network error")
+    emit(1)
+}
+
+fun main() = runBlocking {
+    getData()
+        .retry(3) { cause ->
+            println("Retrying due to: $cause")
+            true // Retry on any error
+        }
+        .collect { value ->
+            println("Collected value: $value")
+        }
+}
+
+Explanation:
+retry(3): The flow will retry up to 3 times in case of failure.
+The lambda { cause -> true }: This indicates that on any failure (cause), you want to retry.
+
+2. retryWhen
+retryWhen gives more flexibility than retry because it lets you define a condition for retrying based on the exception type, and you can control the delay between retries as well.
+
+Example:
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
+
+fun getData(): Flow<Int> = flow {
+    println("Emitting data...")
+    delay(100)
+    if (Math.random() > 0.5) throw Exception("Network error")
+    emit(1)
+}
+
+fun main() = runBlocking {
+    getData()
+        .retryWhen { cause, attempt ->
+            if (attempt < 3) {
+                println("Retrying due to: $cause, attempt: $attempt")
+                delay(500) // delay between retries
+                true // retry the flow
+            } else {
+                false // do not retry after 3 attempts
+            }
+        }
+        .collect { value ->
+            println("Collected value: $value")
+        }
+}
+
+Explanation:
+retryWhen: This operator allows you to specify the retry condition based on the cause and attempt.
+attempt: Keeps track of the retry count.
+You can add custom logic to decide whether to retry or not based on the attempt and cause.
+
+Key Differences:
+retry retries based on a fixed number of attempts and doesn't allow much customization for delays or conditions.
+retryWhen is more flexible because it allows you to add custom retry logic, including adding delays or changing retry conditions.
+
