@@ -1,2 +1,65 @@
 11 - Exception Handling in Kotlin Flow
 
+Exception handling in Kotlin Flow can be tricky, but Kotlin provides several ways to handle exceptions in flows. Since Flow is cold and asynchronous, exceptions that occur during the emission of items or during the collection need to be caught and handled properly.
+
+Here are some key ways to handle exceptions in Kotlin flows:
+
+1. Using catch Operator
+The catch operator allows you to intercept exceptions that occur in the flow and handle them accordingly. It's similar to a try-catch block for flows.
+
+Example:
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.delay
+
+fun getData(): Flow<Int> = flow {
+    delay(100)
+    throw Exception("Something went wrong!")
+}
+
+fun main() = runBlocking {
+    getData()
+        .catch { e ->
+            println("Caught exception: ${e.message}")
+            emit(-1) // Emit a fallback value
+        }
+        .collect { value ->
+            println("Collected value: $value")
+        }
+}
+Explanation:
+catch { e -> ... }: This catches any exception that occurs in the flow and allows you to handle it.
+After catching the exception, you can either:
+Emit a fallback value (like emit(-1) in the example).
+Log the error or perform any custom recovery logic.
+
+2. Using onCompletion Operator
+onCompletion allows you to execute a block of code when the flow collection is complete, whether it's due to successful completion or due to an exception.
+
+Example:
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.delay
+
+fun getData(): Flow<Int> = flow {
+    delay(100)
+    throw Exception("Something went wrong!")
+}
+
+fun main() = runBlocking {
+    getData()
+        .onCompletion { cause ->
+            if (cause != null) {
+                println("Flow completed with error: ${cause.message}")
+            } else {
+                println("Flow completed successfully!")
+            }
+        }
+        .collect { value ->
+            println("Collected value: $value")
+        }
+}
+Explanation:
+onCompletion { cause -> ... }: This block will run after the flow is collected, and it will have the cause parameter containing the exception if one was thrown, or null if the flow completed successfully. Without using the catch operator: It will raise the exception and crash.
+
+
