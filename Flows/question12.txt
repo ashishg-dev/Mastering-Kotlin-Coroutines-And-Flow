@@ -1,0 +1,100 @@
+12 - How can we collect Flows in Jetpack Compose?
+
+1. Using collectAsState for Simple Flow Collection
+collectAsState is the most commonly used method to collect flows in Jetpack Compose.
+It automatically handles lifecycle awareness, ensuring the flow is only collected when
+the composable is active and safely cancels it when the composable is no longer in the composition.
+
+Here's an example:
+
+Example:
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+
+// Sample Flow
+fun getDataFlow(): Flow<String> = flow {
+    delay(1000) // Simulate delay
+    emit("Hello, Jetpack Compose!")
+}
+
+@Composable
+fun MyComposable() {
+    // Collect flow using collectAsState
+    val flowData = getDataFlow().collectAsState(initial = "Loading...")
+
+    // Display collected data in a Text composable
+    Column {
+        Text(text = flowData.value) // Shows the collected flow data
+        Button(onClick = { /* Do something when button is clicked */ }) {
+            Text("Click Me")
+        }
+    }
+}
+Explanation:
+getDataFlow(): A simple Flow that emits a string after a delay.
+collectAsState: This extension function collects the flow and automatically updates the UI whenever the flow emits new values.
+The initial value ("Loading...") is displayed while the flow is being collected.
+Reactive UI: The UI will automatically recompose when the flow emits new values.
+
+2. Manually Collecting Flows in a Coroutine Scope
+If you need more control over the flow collection, you can manually collect it using LaunchedEffect or rememberCoroutineScope.
+This approach is useful when you want to perform side effects or handle events as the flow is collected.
+
+Example using LaunchedEffect:
+import androidx.compose.runtime.*
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
+
+@Composable
+fun CollectFlowWithLaunchedEffect() {
+    // Flow that emits data
+    val dataFlow = getDataFlow()
+
+    var collectedData by remember { mutableStateOf("Loading...") }
+
+    // Collect flow inside LaunchedEffect (safe collection when composable is in the composition)
+    LaunchedEffect(dataFlow) {
+        dataFlow.collect { value ->
+            collectedData = value // Update collected data
+        }
+    }
+
+    // Display the collected data
+    Text(text = collectedData)
+}
+Explanation:
+LaunchedEffect: This composable collects the flow inside a coroutine scope and ensures that the flow is only collected when the composable is active.
+collect: Manually collects the flow and updates the collectedData state, causing the UI to recompose when the flow emits new values.
+State Handling: collectedData is updated on each emission, and the UI reacts to changes in this state.
+
+3. Using collectAsStateWithLifecycle for Lifecycle Awareness
+collectAsStateWithLifecycle is an extension function introduced in Jetpack Compose's Lifecycle library.
+It's a more lifecycle-aware version of collectAsState and ensures that the flow is safely collected with proper
+lifecycle handling, even when the composable is in the background.
+
+Example:
+import androidx.compose.runtime.*
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.flow.*
+
+@Composable
+fun CollectWithLifecycle() {
+    // Sample flow
+    val dataFlow = flowOf("Data collected safely with lifecycle awareness")
+
+    // Collect the flow with lifecycle awareness
+    val data by dataFlow.collectAsStateWithLifecycle("Loading...")
+
+    Text(text = data)
+}
+Explanation:
+collectAsStateWithLifecycle: This is a lifecycle-aware version of collectAsState.
+It ensures that the flow is collected only when the composable is active,
+and automatically cancels the collection when the composable is no longer in the composition.
