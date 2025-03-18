@@ -1,0 +1,80 @@
+13 - what are the difference between suspend function and flow?
+
+The suspend function and the Flow API in Kotlin are both part of Kotlin's coroutines system,
+but they serve different purposes and have different behaviors.
+
+1. Suspend Function:
+Definition: A suspend function is a function that can
+suspend its execution at certain points and resume later,
+without blocking the thread.
+
+Usage: It is used for performing asynchronous operations,
+like making network requests or waiting for a result.
+A suspend function only works inside a coroutine or another suspend function.
+
+Return Type: A suspend function usually returns a result directly,
+such as T or a nullable T?.
+
+Behavior: The function suspends execution and resumes later,
+but it only produces a single result at a time.
+
+Example:
+suspend fun fetchData(): String {
+    // Simulating network call or IO operation
+    delay(1000) // Suspend the coroutine for 1 second
+    return "Data fetched"
+}
+
+
+2. Flow API:
+Definition: Flow is a cold asynchronous stream that can emit multiple values over time.
+It is a type of stream that works with coroutines and allows you to handle a sequence of asynchronous data.
+
+Usage: It is used when you need to handle streams of data (multiple values emitted over time),
+such as receiving data from a network stream, database, or events.
+
+Return Type: Flow<T> represents a stream of values of type T.
+You collect data from a Flow by using a collector in a coroutine.
+
+Behavior: A Flow can emit multiple values over time and can be collected asynchronously.
+
+Example:
+fun fetchDataFlow(): Flow<String> = flow {
+    delay(1000) // Simulating network call or IO operation
+    emit("Data fetched") // Emit a value to the stream
+}
+
+Key Differences:
+Single vs. Multiple Values:
+A suspend function returns a single value.
+A Flow emits multiple values over time.
+
+Usage Context:
+suspend functions are used when you need to perform a one-off asynchronous task
+(like making a network request and getting a single result).
+
+Flow is used when you want to handle a stream of asynchronous data over time 
+(like observing changes from a database or a continuous stream of data).
+
+Control Flow:
+A suspend function can only suspend and resume once,
+and its result is returned immediately once execution finishes.
+
+A Flow can emit multiple values and can be collected over time,
+often using operators like collect, map, filter, etc.
+
+When to Use Each:
+Use suspend functions when you are handling one-time asynchronous operations
+(e.g., a network request, or waiting for some result).
+
+Use Flow when you need to handle streams of data or
+multiple asynchronous values that arrive over time.
+
+Example: Combining Both
+You might sometimes use a suspend function inside a Flow, such as emitting a single value from a suspend function:
+
+fun fetchDataFlow(): Flow<String> = flow {
+    emit(fetchData()) // fetchData is a suspend function
+}
+In this example, fetchData() is a suspend function that fetches the data once, and then it's emitted into the flow.
+
