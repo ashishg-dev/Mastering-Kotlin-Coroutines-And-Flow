@@ -1,6 +1,8 @@
 3 - What are different types of terminal Operators in Kotlin Flow?
 
-In Kotlin Flow, terminal operators are the operators that trigger the flow to start emitting values. They are used to collect the values from the flow, and they end the flow processing. Once a terminal operator is called, the flow starts executing and emitting data until it's completed or cancelled.
+In Kotlin Flow, terminal operators are the operators that trigger the flow to start emitting values.
+They are used to collect the values from the flow, and they end the flow processing.
+Once a terminal operator is called, the flow starts executing and emitting data until it's completed or cancelled.
 
 Here’s a more complete list of terminal operators in Kotlin Flow:
 
