@@ -1,6 +1,7 @@
 
 1 - What are Kotlin Coroutines, and how are they different from traditional threading?
   Kotlin Coroutines are a powerful feature of the Kotlin programming language that simplifies asynchronous programming and concurrency.
+  (concurrency is about dealing with multiple tasks at once, and asynchronous is a way to handle tasks so they don’t block each other while waiting.)
   They provide a way to perform tasks like network requests, database queries, or other time-consuming operations without blocking the main thread, thus preventing UI freezes or lag. 
 
 Why Coroutines? (The Problem with Traditional Threads)
