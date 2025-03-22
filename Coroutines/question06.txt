@@ -8,7 +8,8 @@ It encapsulates various elements that control the behavior of the coroutine, suc
 The context helps determine how the coroutine behaves, what thread it runs on, and how its lifecycle is managed.
 
 Components of a Coroutine Context
-A coroutine context is a set of key-value pairs (pairs of Key and Value) that define the execution environment for the coroutine. The context is represented by the CoroutineContext interface, which can hold various elements, such as:
+A coroutine context is a set of key-value pairs (pairs of Key and Value) that define the execution environment for the coroutine.
+The context is represented by the CoroutineContext interface, which can hold various elements, such as:
 
 Dispatcher
 Job
