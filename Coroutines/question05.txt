@@ -10,7 +10,8 @@ Here's a breakdown of the most common coroutine builders:
 1. launch:
 
 Purpose: Starts a new coroutine that doesn't return a result. It's like saying, "Go do this task in the background, but I don't need a specific answer back."
-Use Cases: For fire-and-forget tasks, side effects, or tasks where you don't need to retrieve a value. Good for UI updates or background operations that don't directly affect the main flow.
+Use Cases: For fire-and-forget tasks, side effects, or tasks where you don't need to retrieve a value.
+Good for UI updates or background operations that don't directly affect the main flow.
 Example:
 
 viewModelScope.launch { // Launch in a ViewModel scope
@@ -53,7 +54,9 @@ fun main() { // In the main function (not usually in Android)
 
 4. coroutineScope:
 
-Purpose: Creates a new coroutine scope. It's like saying, "Create a new container for coroutines." Useful for launching multiple coroutines that need to be treated as a unit (e.g., all need to be cancelled together). coroutineScope itself is a suspending function. It waits for all its children to complete before completing itself.
+Purpose: Creates a new coroutine scope. It's like saying, "Create a new container for coroutines."
+Useful for launching multiple coroutines that need to be treated as a unit (e.g., all need to be cancelled together).
+coroutineScope itself is a suspending function. It waits for all its children to complete before completing itself.
 Use Cases: For launching multiple related coroutines where you want to ensure they all complete (or are cancelled) before continuing. Useful for structured concurrency.
 Example:
 Kotlin
