@@ -1,10 +1,12 @@
 6. Explain the concept of Coroutine Context in Kotlin Coroutines.
 
 Coroutine Context is a set of elements that define the behavior and characteristics of a coroutine.
-It includes things like dispatchers, exception handlers, and coroutine name. The context is used to determine how and where the coroutine will be executed.
+It includes things like dispatchers, exception handlers, and coroutine name.
+The context is used to determine how and where the coroutine will be executed.
 
 In Kotlin Coroutines, the Coroutine Context is a key concept that defines the environment or context in which a coroutine runs.
-It encapsulates various elements that control the behavior of the coroutine, such as the dispatcher, job, exception handler, and other specific configurations.
+It encapsulates various elements that control the behavior of the coroutine,
+such as the dispatcher, job, exception handler, and other specific configurations.
 The context helps determine how the coroutine behaves, what thread it runs on, and how its lifecycle is managed.
 
 Components of a Coroutine Context
